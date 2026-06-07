@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd artifacts/artifacts/chess-fusion && npm install && npm run build",
+  "outputDirectory": "artifacts/artifacts/chess-fusion/dist/public",
+  "installCommand": "echo skip",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
