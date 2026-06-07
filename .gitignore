@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+artifacts/artifacts/chess-fusion/dist/
+artifacts/artifacts/api-server/dist/
+artifacts/artifacts/mockup-sandbox/dist/
+
+# Environment & secrets — NEVER commit these
+.env
+.env.local
+.env.development
+.env.production
+*.env
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Replit internals
+.replit
+replit.nix
+.upm/
+.cache/
+
+# TypeScript
+*.tsbuildinfo
