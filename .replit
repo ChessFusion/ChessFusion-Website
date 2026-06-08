@@ -33,3 +33,10 @@ externalPort = 80
 [[ports]]
 localPort = 5000
 externalPort = 5000
+
+[userenv]
+
+[userenv.shared]
+VITE_FIREBASE_PROJECT_ID = "chess-fusion-202b2"
+VITE_FIREBASE_AUTH_DOMAIN = "chess-fusion-202b2.firebaseapp.com"
+VITE_FIREBASE_STORAGE_BUCKET = "chess-fusion-202b2.appspot.com"

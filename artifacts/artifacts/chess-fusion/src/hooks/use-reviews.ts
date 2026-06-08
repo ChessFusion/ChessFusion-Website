@@ -1,14 +1,23 @@
 import { useEffect, useState, useCallback } from "react";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  addDoc,
+  getDocs,
+  serverTimestamp,
+  Timestamp,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export interface Review {
-  id: number;
+  id: string;
   name: string;
   rating: number;
   comment: string;
   createdAt: string;
 }
-
-const API_BASE = "/api";
 
 export function useReviews() {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -16,13 +25,31 @@ export function useReviews() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchReviews = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const res = await fetch(`${API_BASE}/reviews`);
-      if (!res.ok) throw new Error("Failed to fetch reviews");
-      const data: Review[] = await res.json();
+      const q = query(
+        collection(db, "reviews"),
+        where("hidden", "==", false),
+        orderBy("createdAt", "desc")
+      );
+      const snapshot = await getDocs(q);
+      const data: Review[] = snapshot.docs.map((doc) => {
+        const d = doc.data();
+        const createdAt =
+          d.createdAt instanceof Timestamp
+            ? d.createdAt.toDate().toISOString()
+            : new Date().toISOString();
+        return {
+          id: doc.id,
+          name: d.name as string,
+          rating: d.rating as number,
+          comment: d.comment as string,
+          createdAt,
+        };
+      });
       setReviews(data);
-      setError(null);
-    } catch (err) {
+    } catch {
       setError("Could not load reviews. Please try again.");
     } finally {
       setLoading(false);
@@ -30,20 +57,30 @@ export function useReviews() {
   }, []);
 
   useEffect(() => {
-    fetchReviews();
+    void fetchReviews();
   }, [fetchReviews]);
 
-  const addReview = async (review: { name: string; rating: number; comment: string }) => {
-    const res = await fetch(`${API_BASE}/reviews`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(review),
+  const addReview = async (review: {
+    name: string;
+    rating: number;
+    comment: string;
+  }) => {
+    const docRef = await addDoc(collection(db, "reviews"), {
+      name: review.name,
+      rating: review.rating,
+      comment: review.comment,
+      hidden: false,
+      createdAt: serverTimestamp(),
     });
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      throw new Error(data.error ?? "Failed to submit review");
-    }
-    const saved: Review = await res.json();
+
+    const saved: Review = {
+      id: docRef.id,
+      name: review.name,
+      rating: review.rating,
+      comment: review.comment,
+      createdAt: new Date().toISOString(),
+    };
+
     setReviews((prev) => [saved, ...prev]);
     return saved;
   };

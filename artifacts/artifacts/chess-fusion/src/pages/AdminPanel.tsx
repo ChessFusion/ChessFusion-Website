@@ -1,10 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
 import { Search, Trash2, Eye, EyeOff, Star, LogOut, Shield, Loader2, AlertTriangle } from "lucide-react";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  type User,
+} from "firebase/auth";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  orderBy,
+  query,
+  Timestamp,
+} from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
 
-const API_BASE = import.meta.env.VITE_API_URL ?? "";
+const ADMIN_EMAIL = import.meta.env.VITE_FIREBASE_ADMIN_EMAIL as string;
 
 interface Review {
-  id: number;
+  id: string;
   name: string;
   rating: number;
   comment: string;
@@ -26,7 +43,7 @@ function StarDisplay({ rating }: { rating: number }) {
   );
 }
 
-function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
+function LoginScreen({ onLogin }: { onLogin: () => void }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -36,20 +53,10 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_BASE}/api/admin/auth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
-      if (res.ok) {
-        const data = (await res.json()) as { token: string };
-        sessionStorage.setItem("admin_token", data.token);
-        onLogin(data.token);
-      } else {
-        setError("Invalid password. Access denied.");
-      }
+      await signInWithEmailAndPassword(auth, ADMIN_EMAIL, password);
+      onLogin();
     } catch {
-      setError("Connection failed. Please try again.");
+      setError("Invalid password. Access denied.");
     } finally {
       setLoading(false);
     }
@@ -108,37 +115,45 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
   );
 }
 
-function Dashboard({ token, onLogout }: { token: string; onLogout: () => void }) {
+function Dashboard({ onLogout }: { onLogout: () => void }) {
+  const [allReviews, setAllReviews] = useState<Review[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [actionLoading, setActionLoading] = useState<number | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [error, setError] = useState("");
-  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  const fetchReviews = useCallback(async (q = "") => {
+  const fetchReviews = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const url = q.trim()
-        ? `${API_BASE}/api/admin/reviews?search=${encodeURIComponent(q)}`
-        : `${API_BASE}/api/admin/reviews`;
-      const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${token}` },
+      const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
+      const data: Review[] = snapshot.docs.map((d) => {
+        const raw = d.data();
+        const createdAt =
+          raw.createdAt instanceof Timestamp
+            ? raw.createdAt.toDate().toISOString()
+            : new Date().toISOString();
+        return {
+          id: d.id,
+          name: raw.name as string,
+          rating: raw.rating as number,
+          comment: raw.comment as string,
+          hidden: raw.hidden as boolean,
+          createdAt,
+        };
       });
-      if (res.status === 401) {
-        onLogout();
-        return;
-      }
-      const data = (await res.json()) as Review[];
+      setAllReviews(data);
       setReviews(data);
     } catch {
       setError("Failed to load reviews.");
     } finally {
       setLoading(false);
     }
-  }, [token, onLogout]);
+  }, []);
 
   useEffect(() => {
     void fetchReviews();
@@ -146,32 +161,35 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
+    const term = searchInput.trim().toLowerCase();
     setSearch(searchInput);
-    void fetchReviews(searchInput);
+    if (!term) {
+      setReviews(allReviews);
+      return;
+    }
+    setReviews(
+      allReviews.filter(
+        (r) =>
+          r.name.toLowerCase().includes(term) ||
+          r.comment.toLowerCase().includes(term)
+      )
+    );
   }
 
   function clearSearch() {
     setSearchInput("");
     setSearch("");
-    void fetchReviews("");
+    setReviews(allReviews);
   }
 
   async function toggleVisibility(review: Review) {
     setActionLoading(review.id);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/reviews/${review.id}/visibility`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ hidden: !review.hidden }),
-      });
-      if (res.ok) {
-        setReviews((prev) =>
-          prev.map((r) => (r.id === review.id ? { ...r, hidden: !r.hidden } : r))
-        );
-      }
+      await updateDoc(doc(db, "reviews", review.id), { hidden: !review.hidden });
+      const updated = (r: Review) =>
+        r.id === review.id ? { ...r, hidden: !r.hidden } : r;
+      setAllReviews((prev) => prev.map(updated));
+      setReviews((prev) => prev.map(updated));
     } catch {
       setError("Action failed. Please try again.");
     } finally {
@@ -179,17 +197,14 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
     }
   }
 
-  async function deleteReview(id: number) {
+  async function deleteReview(id: string) {
     setActionLoading(id);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/reviews/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        setReviews((prev) => prev.filter((r) => r.id !== id));
-        setDeleteConfirm(null);
-      }
+      await deleteDoc(doc(db, "reviews", id));
+      const remove = (prev: Review[]) => prev.filter((r) => r.id !== id);
+      setAllReviews(remove);
+      setReviews(remove);
+      setDeleteConfirm(null);
     } catch {
       setError("Delete failed. Please try again.");
     } finally {
@@ -213,6 +228,11 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
     });
   }
 
+  async function handleLogout() {
+    await signOut(auth);
+    onLogout();
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="border-b border-primary/10 bg-black/80 backdrop-blur sticky top-0 z-20">
@@ -223,7 +243,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
             <span className="hidden sm:block text-white/20 text-xs tracking-widest">· CHESS FUSION</span>
           </div>
           <button
-            onClick={onLogout}
+            onClick={() => void handleLogout()}
             className="flex items-center gap-2 text-xs text-white/40 hover:text-white/70 transition-colors tracking-widest uppercase"
           >
             <LogOut size={13} />
@@ -330,7 +350,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
                       )}
                     </div>
                     <p className="text-sm text-white/50 leading-relaxed break-words">{review.comment}</p>
-                    <p className="text-[10px] text-white/20 mt-1">ID #{review.id}</p>
+                    <p className="text-[10px] text-white/20 mt-1">ID {review.id.slice(0, 8)}…</p>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
@@ -388,20 +408,32 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
 }
 
 export default function AdminPanel() {
-  const [token, setToken] = useState<string | null>(() => sessionStorage.getItem("admin_token"));
+  const [user, setUser] = useState<User | null | "loading">("loading");
 
-  function handleLogin(t: string) {
-    setToken(t);
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => setUser(u));
+    return unsub;
+  }, []);
+
+  function handleLogin() {
+    // onAuthStateChanged will update user state automatically
   }
 
   function handleLogout() {
-    sessionStorage.removeItem("admin_token");
-    setToken(null);
+    setUser(null);
   }
 
-  if (!token) {
+  if (user === "loading") {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <Loader2 size={24} className="animate-spin text-primary/50" />
+      </div>
+    );
+  }
+
+  if (!user) {
     return <LoginScreen onLogin={handleLogin} />;
   }
 
-  return <Dashboard token={token} onLogout={handleLogout} />;
+  return <Dashboard onLogout={handleLogout} />;
 }
