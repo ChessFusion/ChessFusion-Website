@@ -7,7 +7,7 @@ const sections = [
     heading: "1. Introduction",
     content: `Chess Fusion — Imperial Edition ("the App," "we," "our," or "us") is developed and operated by Sayed Ali Shah, trading as DreamArk Studio. This Privacy Policy explains what personal[...]
 
-We are committed to handling your information transparently and responsibly. We collect only what is necessary to deliver the App's features — online multiplayer, clan communities, ranked play, [...]`
+We are committed to handling your information transparently and responsibly. We collect only what is necessary to deliver the App's features — online multiplayer, clan communities, ranked play, ...`,
   },
   {
     heading: "2. Information We Collect",
@@ -30,7 +30,7 @@ We are committed to handling your information transparently and responsibly. We 
       },
       {
         label: "2.3 Gameplay Data",
-        content: `Move history, game IDs, timer choice, fusion setting, active cosmetics, fusion credit counts, trial status, cosmetic ownership flags, VIP/subscription status, and capture statist[...]
+        content: `Move history, game IDs, timer choice, fusion setting, active cosmetics, fusion credit counts, trial status, cosmetic ownership flags, VIP/subscription status, and capture statistics.`,
       },
       {
         label: "2.4 Social Data",
@@ -38,7 +38,7 @@ We are committed to handling your information transparently and responsibly. We 
       },
       {
         label: "2.5 Device and Technical Data",
-        content: `Firebase Analytics may automatically collect device information, OS version, app version, Android Advertising ID (AAID), and approximate geographic location (country level). Loca[...]
+        content: `Firebase Analytics may automatically collect device information, OS version, app version, Android Advertising ID (AAID), and approximate geographic location (country level). Local storage data remains on your device until you clear the App's data or uninstall.`,
       },
     ],
   },
@@ -52,7 +52,7 @@ We are committed to handling your information transparently and responsibly. We 
 • Ranking and Leaderboards: To display you on World, Clan, League, and Friends leaderboards.
 • Clan and Social Features: To power clan communities, clan chat, clan wars, clan challenges, and friend interactions.
 • Cosmetic and Store Features: To display your equipped cosmetics and make owned items available across sessions.
-• Analytics and App Improvement: Firebase Analytics data is used in aggregate to understand App usage and improve features. We do not use analytics to identify individual users for marketing pur[...]
+• Analytics and App Improvement: Firebase Analytics data is used in aggregate to understand App usage and improve features. We do not use analytics to identify individual users for marketing purposes.
 • Daily Puzzles and Achievement Tracking: To deliver rewards and maintain progress records.`,
   },
   {
@@ -91,7 +91,7 @@ You may also contact us directly at: support.chessfusion@gmail.com`,
   },
   {
     heading: "7. Children's Privacy",
-    content: `The App is intended for users aged 13 and older. We do not knowingly collect personal information from children under 13. If we become aware of such collection, we will immediately d[...]
+    content: `The App is intended for users aged 13 and older. We do not knowingly collect personal information from children under 13. If we become aware of such collection, we will immediately d...`,
   },
   {
     heading: "8. User Rights",
@@ -129,7 +129,7 @@ Address: DreamArk Studio, Phulji Station, Phulji, Sindh, Pakistan — 76220`,
   },
   {
     heading: "11. Changes to This Policy",
-    content: `We may update this Privacy Policy from time to time to reflect changes in the App's features, applicable law, or our data practices. Material changes will be posted within the App o[...]
+    content: `We may update this Privacy Policy from time to time to reflect changes in the App's features, applicable law, or our data practices. Material changes will be posted within the App o...`,
   },
 ];
 
