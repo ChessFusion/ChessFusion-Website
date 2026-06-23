@@ -38,7 +38,7 @@ We are committed to handling your information transparently and responsibly. We 
       },
       {
         label: "2.5 Device and Technical Data",
-        content: `Firebase Analytics may automatically collect device information, OS version, app version, Android Advertising ID (AAID), and approximate geographic location (country level). Local storage data remains on your device until you clear the App's data or uninstall.`,
+        content: `Firebase Analytics may automatically collect device information, OS version, app version, Android Advertising ID (AAID), and approximate geographic location (country level). Loca[...]
       },
     ],
   },
@@ -77,7 +77,7 @@ We do not sell, rent, or trade your personal data to any third party for adverti
   },
   {
     heading: "6. Account Deletion",
-    content: `To request account deletion: navigate to Settings → Account Deletion → Official Website Account Deletion Page.
+    content: `To request account deletion: navigate to Settings → Account Deletion → https://chessfusion.vercel.app/account-deletion
 
 Submit your Full Name, In-Game Username, and Email Address. Account ownership is verified before processing.
 
