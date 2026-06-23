@@ -10,9 +10,9 @@ import dreamarkLogoPath from "@assets/dreamark-logo_1780824425079.png";
 import gameScreenPath from "@assets/game-screen_1780824579265.png";
 import backgroundPath from "@assets/background_1780824480551.png";
 import bottomCinematicPath from "@assets/bottom_cinematic_1780830926952.png";
-import instagramLogoPath from "@assets/instagram_logo_1780830854300.jpg";
-import xLogoPath from "@assets/x_logo_1780830854302.png";
-import tiktokLogoPath from "@assets/tiktok_logo_1780830868905.jpeg";
+import instagramLogoPath from "@assets/instagram_logo.png";
+import xLogoPath from "@assets/x_logo.png";
+import tiktokLogoPath from "@assets/tiktok_logo.png";
 
 function FadeInSection({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
