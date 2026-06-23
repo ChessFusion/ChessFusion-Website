@@ -1,8 +1,8 @@
 import { Link } from "wouter";
 import { FaFacebook, FaYoutube } from "react-icons/fa";
-import instagramLogoPath from "@assets/instagram_logo_1780830854300.jpg";
-import xLogoPath from "@assets/x_logo_1780830854302.png";
-import tiktokLogoPath from "@assets/tiktok_logo_1780830868905.jpeg";
+import instagramLogoPath from "@assets/instagram_logo.png";
+import xLogoPath from "@assets/x_logo.png";
+import tiktokLogoPath from "@assets/tiktok_logo.png";
 import { GAME_VERSION, SOCIAL_LINKS } from "@/config";
 
 const footerLinks = [
