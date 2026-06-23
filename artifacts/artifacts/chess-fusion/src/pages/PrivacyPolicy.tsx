@@ -5,9 +5,9 @@ import { ArrowLeft } from "lucide-react";
 const sections = [
   {
     heading: "1. Introduction",
-    content: `Chess Fusion — Imperial Edition ("the App," "we," "our," or "us") is developed and operated by Sayed Ali Shah, trading as DreamArk Studio. This Privacy Policy explains what personal data we collect from users of the App, how that data is used, with whom it is shared, how long it is retained, and what rights you have over your data.
+    content: `Chess Fusion — Imperial Edition ("the App," "we," "our," or "us") is developed and operated by Sayed Ali Shah, trading as DreamArk Studio. This Privacy Policy explains what personal[...]
 
-We are committed to handling your information transparently and responsibly. We collect only what is necessary to deliver the App's features — online multiplayer, clan communities, ranked play, and cosmetic customization — and we do not sell your personal data to third parties. By creating an account and using the App, you acknowledge that you have read and understood this policy.`,
+We are committed to handling your information transparently and responsibly. We collect only what is necessary to deliver the App's features — online multiplayer, clan communities, ranked play, [...]`
   },
   {
     heading: "2. Information We Collect",
@@ -16,7 +16,7 @@ We are committed to handling your information transparently and responsibly. We 
         label: "2.1 Information You Provide Directly",
         content: `When you register or use the App, you provide the following information:
 
-• Google Account Information: Your Google account email address, display name, and profile photo URL via Google Identity Services and Firebase Authentication. We do not receive or store your Google password.
+• Google Account Information: Your Google account email address, display name, and profile photo URL via Google Identity Services and Firebase Authentication. We do not receive or store your Goo[...]
 • Username: A unique in-game username you create during registration, stored in Firestore and cached in your device's local storage.
 • Display Name, Country, and Profile Bio: Optional profile details stored locally and synced to Firestore.
 • Clan Chat Messages: Text messages you send in your clan's chat room, stored in Firestore and visible to all clan members.
@@ -30,7 +30,7 @@ We are committed to handling your information transparently and responsibly. We 
       },
       {
         label: "2.3 Gameplay Data",
-        content: `Move history, game IDs, timer choice, fusion setting, active cosmetics, fusion credit counts, trial status, cosmetic ownership flags, VIP/subscription status, and capture statistics.`,
+        content: `Move history, game IDs, timer choice, fusion setting, active cosmetics, fusion credit counts, trial status, cosmetic ownership flags, VIP/subscription status, and capture statist[...]
       },
       {
         label: "2.4 Social Data",
@@ -38,7 +38,7 @@ We are committed to handling your information transparently and responsibly. We 
       },
       {
         label: "2.5 Device and Technical Data",
-        content: `Firebase Analytics may automatically collect device information, OS version, app version, and approximate geographic location (country level). Local storage data remains on your device until you clear the App's data or uninstall.`,
+        content: `Firebase Analytics may automatically collect device information, OS version, app version, Android Advertising ID (AAID), and approximate geographic location (country level). Local storage data remains on your device until you clear the App's data or uninstall.`,
       },
     ],
   },
@@ -52,7 +52,7 @@ We are committed to handling your information transparently and responsibly. We 
 • Ranking and Leaderboards: To display you on World, Clan, League, and Friends leaderboards.
 • Clan and Social Features: To power clan communities, clan chat, clan wars, clan challenges, and friend interactions.
 • Cosmetic and Store Features: To display your equipped cosmetics and make owned items available across sessions.
-• Analytics and App Improvement: Firebase Analytics data is used in aggregate to understand App usage and improve features. We do not use analytics to identify individual users for marketing purposes.
+• Analytics and App Improvement: Firebase Analytics data is used in aggregate to understand App usage and improve features. We do not use analytics to identify individual users for marketing pur[...]
 • Daily Puzzles and Achievement Tracking: To deliver rewards and maintain progress records.`,
   },
   {
@@ -91,7 +91,7 @@ You may also contact us directly at: support.chessfusion@gmail.com`,
   },
   {
     heading: "7. Children's Privacy",
-    content: `The App is intended for users aged 13 and older. We do not knowingly collect personal information from children under 13. If we become aware of such collection, we will immediately delete the data and close the associated account. Contact us at support.chessfusion@gmail.com if you believe a child under 13 has created an account.`,
+    content: `The App is intended for users aged 13 and older. We do not knowingly collect personal information from children under 13. If we become aware of such collection, we will immediately d[...]
   },
   {
     heading: "8. User Rights",
@@ -129,7 +129,7 @@ Address: DreamArk Studio, Phulji Station, Phulji, Sindh, Pakistan — 76220`,
   },
   {
     heading: "11. Changes to This Policy",
-    content: `We may update this Privacy Policy from time to time to reflect changes in the App's features, applicable law, or our data practices. Material changes will be posted within the App or via the Google Play Store listing with an updated Effective Date. Continued use after the effective date constitutes acceptance.`,
+    content: `We may update this Privacy Policy from time to time to reflect changes in the App's features, applicable law, or our data practices. Material changes will be posted within the App o[...]
   },
 ];
 
